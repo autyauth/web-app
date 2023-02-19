@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div id="maincontainer"></div>
+        <script>
+            let div_maincontainer = document.getElementById("maincontainer");
+            
+            let header_top = document.createElement("header");
+            header_top.style.height = "81px";
+            div_maincontainer.appendChild(header_top);
+
+            let container_h1 = document.createElement("h2");
+            let container_h1_text = document.createTextNode("Exercise 04: JavaScript&DOM");
+            container_h1.appendChild(container_h1_text);
+            header_top.appendChild(container_h1);
+
+            // ตัวปุุ่มกด กับ นิฬิกา สร้าง tag แล้วก็ใส่ข้อมูล
+            let date_clock_button = document.createElement("button");
+            let clock_button_text = document.createTextNode("Click me to display Date and Time");
+            date_clock_button.appendChild(clock_button_text);
+            header_top.appendChild(date_clock_button);
+
+            // date_clock_button.style.position = "relative";
+            
+            // วันกับนาฬิกาที่นับ ประกาศตัวแปร จัดหน้าตา
+            let date_clock = document.createElement("div")
+            let date_clock_text = document.createTextNode(new Date().toString());
+            date_clock.appendChild(date_clock_text);
+            date_clock.id = "date_clock";
+            date_clock.style.position = "fixed";
+            date_clock.style.right = "0px";
+            date_clock.style.top = "0px";
+            // date_clock.style.padding = "2px";
+            date_clock.style.background = "cyan";
+            date_clock.style.border ="black solid 2px";
+            date_clock.style.width = "fit-content";
+            date_clock.style.visibility = "hidden";
+            header_top.appendChild(date_clock);
+            
+
+            // profile
+            let div_prosonal = document.createElement("div");
+            div_maincontainer.appendChild(div_prosonal);
+
+            let profile = document.createElement("p");
+            let profile_text = document.createTextNode("Prosonal Info");
+            profile.appendChild(profile_text);
+            profile.id ="proflie";
+            profile.style.color = "pink";
+            profile.style.textDecoration = "underline";
+            profile.style.width = "fit-content";
+            profile.onmouseover = function(){profile.style.color = "blue";profile.style.backgroundColor = "yellow";};
+            profile.onmouseout = function(){profile.style.color = "pink";profile.style.backgroundColor = "white";};
+            div_prosonal.appendChild(profile);
+
+            let profile_info = document.createElement("ul");
+            let myName = document.createElement("li");
+            myName.innerHTML = "Thanakorn Rattanapornchai,ID: 64010342";
+            profile_info.appendChild(myName);
+
+            let subject = document.createElement("li");
+            subject.innerHTML = "Subject: WEB APPLICATION DEVELOPMENT";
+            profile_info.appendChild(subject);
+            let semester = document.createElement("li");
+            semester.innerHTML = "Semeter: 2/2565";
+            profile_info.appendChild(semester);
+
+            profile_info.hidden = true;
+            div_prosonal.appendChild(profile_info);
+
+            let snapshot = document.createElement("div");
+            let snapshot_text = document.createElement("h1");
+            snapshot_text.innerHTML = "Snapshots";
+
+            let snapshot_ul = document.createElement("ul");
+            let firework = document.createElement("li");
+            firework.innerHTML = "Fireworks";
+            snapshot_ul.appendChild(firework);
+            let crest = document.createElement("li");
+            crest.innerHTML = "Crest";
+            snapshot_ul.appendChild(crest);
+            let action = document.createElement("li");
+            action.innerHTML = "Action";
+            snapshot_ul.appendChild(action);
+            let buffalo = document.createElement("li");
+            buffalo.innerHTML = "Buffalo";
+            snapshot_ul.appendChild(buffalo);
+            
+            snapshot_ul.style.color = "blue";
+            snapshot_ul.style.textDecoration = "underline";
+
+            snapshot.appendChild(snapshot_text);
+            snapshot.appendChild(snapshot_ul);
+            div_maincontainer.appendChild(snapshot);
+            let snapshot_img = ["https://upload.wikimedia.org/wikipedia/commons/3/35/KMITL_PCC.png",
+            "https://www.ontariosciencecentre.ca/media/2098/fireworksheader3.jpg",
+            "https://www.mycrest3d.com/wp-content/uploads/image/Crest-3dWhite-Luxe-Professional-Effects-1.jpg",
+            "https://static01.nyt.com/images/2020/08/24/sports/24mlb-kepner-1/merlin_176084667_69b1099b-0b7e-41ce-bfdf-e407899f10dc-jumbo.jpg?quality=75&auto=webp",
+            "https://safariclub.org/wp-content/uploads/2021/11/Uganda-Pearl-Boddington-Lone-buffalo.jpg"];
+            
+            let logo = document.createElement("img");
+            logo.setAttribute("src",snapshot_img[0]);
+            firework.onclick = () =>{
+                logo.setAttribute("src",snapshot_img[1]);
+            };
+            
+            crest.onclick = () =>{
+                logo.setAttribute("src",snapshot_img[2]);
+            }
+            action.onclick = () =>{
+                logo.setAttribute("src",snapshot_img[3]);
+            }
+            buffalo.onclick = () =>{
+                logo.setAttribute("src",snapshot_img[4]);
+            }
+            div_maincontainer.appendChild(logo);
+            
+            
+            
+
+            //worker
+            let clockWorker;
+            let seconds = 0;
+            function setColor() {
+        
+                const colors = ['blue','red',  'green', 'indigo', 'orange', 'yellow', 'violet'];
+                const index = Math.floor(seconds ) % colors.length;
+                seconds+=1;
+                return colors[index];
+            }
+            function create_worker(){
+                // worker เป็นคนนับเวลา เปิดเวลาขวาบน ซ่อนปุ่ม
+                if(typeof(clockWorker) == "undefined") {
+                    clockWorker = new Worker("worker.js");
+                }
+                clockWorker.onmessage = function(event) {
+                    date_clock.innerHTML = event.data;
+                    date_clock.style.backgroundColor = setColor();
+                    date_clock.style.color = setColor();
+                }   
+            }
+            function teminate_worker(){
+                if(typeof(clockWorker) != "undefined") {
+                    clockWorker.terminate();
+                    clockWorker = undefined;
+                }
+            }
+            date_clock_button.onclick = () => {
+                // ถ้ากดก็ให้สร้างweb worker]
+                date_clock.style.visibility = "visible"
+                date_clock.innerHTML = new Date().toString();
+                create_worker();
+                date_clock_button.remove();
+            };
+            
+            date_clock.onclick = () => {
+                if(typeof(clockWorker) != "undefined"){
+                    date_clock.innerHTML = new Date().toString();
+                    teminate_worker();
+                    date_clock.style.position = "relative";
+                    
+                }else{
+                    date_clock.innerHTML = new Date().toString();                    
+                    create_worker();
+                    date_clock.style.position = "fixed";
+                    
+                }
+            };
+            
+            profile.onclick = () =>{
+                profile_info.hidden = !profile_info.hidden;
+                
+            };
+            
+            
+        </script>
+    </body>
+</html>
