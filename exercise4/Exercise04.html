@@ -24,7 +24,7 @@
             // date_clock_button.style.position = "relative";
             
             // วันกับนาฬิกาที่นับ ประกาศตัวแปร จัดหน้าตา
-            let date_clock = document.createElement("div")
+            let date_clock = document.createElement("button")
             let date_clock_text = document.createTextNode(new Date().toString());
             date_clock.appendChild(date_clock_text);
             date_clock.id = "date_clock";
@@ -76,15 +76,19 @@
             let snapshot_ul = document.createElement("ul");
             let firework = document.createElement("li");
             firework.innerHTML = "Fireworks";
+            firework.style.width = "fit-content";
             snapshot_ul.appendChild(firework);
             let crest = document.createElement("li");
             crest.innerHTML = "Crest";
+            crest.style.width = "fit-content";
             snapshot_ul.appendChild(crest);
             let action = document.createElement("li");
             action.innerHTML = "Action";
+            action.style.width = "fit-content";
             snapshot_ul.appendChild(action);
             let buffalo = document.createElement("li");
             buffalo.innerHTML = "Buffalo";
+            buffalo.style.width = "fit-content";
             snapshot_ul.appendChild(buffalo);
             
             snapshot_ul.style.color = "blue";
@@ -100,6 +104,7 @@
             "https://safariclub.org/wp-content/uploads/2021/11/Uganda-Pearl-Boddington-Lone-buffalo.jpg"];
             
             let logo = document.createElement("img");
+            logo.setAttribute("width","550px");
             logo.setAttribute("src",snapshot_img[0]);
             firework.onclick = () =>{
                 logo.setAttribute("src",snapshot_img[1]);
@@ -116,8 +121,7 @@
             }
             div_maincontainer.appendChild(logo);
             
-            
-            
+             
 
             //worker
             let clockWorker;
