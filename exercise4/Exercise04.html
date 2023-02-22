@@ -38,6 +38,56 @@
             date_clock.style.visibility = "hidden";
             header_top.appendChild(date_clock);
             
+            //worker
+            let clockWorker;
+            let seconds = 0;
+            const colors = ['blue','red',  'green', 'indigo', 'orange', 'yellow', 'violet'];
+            function setColor() {
+        
+                
+                const index = Math.floor(seconds) % colors.length;
+                
+                seconds+=1;
+                return colors[index];
+            }
+            function start_worker(){
+                // worker เป็นคนนับเวลา เปิดเวลาขวาบน ซ่อนปุ่ม
+                if(typeof(clockWorker) == "undefined") {
+                    clockWorker = new Worker("worker.js");
+                }
+                clockWorker.onmessage = function(event) {
+                    date_clock.innerHTML = event.data;
+                    date_clock.style.backgroundColor = setColor();
+                    date_clock.style.color = setColor();
+                }   
+            }
+            function teminate_worker(){
+                if(typeof(clockWorker) != "undefined") {
+                    clockWorker.terminate();
+                    clockWorker = undefined;
+                }
+            }
+            date_clock_button.onclick = () => {
+                // ถ้ากดก็ให้สร้างweb worker]
+                date_clock.style.visibility = "visible"
+                date_clock.innerHTML = new Date().toString();
+                start_worker();
+                date_clock_button.remove();
+            };
+            
+            date_clock.onclick = () => {
+                if(typeof(clockWorker) != "undefined"){
+                    date_clock.innerHTML = new Date().toString();
+                    teminate_worker();
+                    date_clock.style.position = "relative";
+                    
+                }else{
+                    date_clock.innerHTML = new Date().toString();                    
+                    start_worker();
+                    date_clock.style.position = "fixed";
+                    
+                }
+            };
 
             // profile
             let div_prosonal = document.createElement("div");
@@ -97,6 +147,7 @@
             snapshot.appendChild(snapshot_text);
             snapshot.appendChild(snapshot_ul);
             div_maincontainer.appendChild(snapshot);
+            
             let snapshot_img = ["https://upload.wikimedia.org/wikipedia/commons/3/35/KMITL_PCC.png",
             "https://www.ontariosciencecentre.ca/media/2098/fireworksheader3.jpg",
             "https://www.mycrest3d.com/wp-content/uploads/image/Crest-3dWhite-Luxe-Professional-Effects-1.jpg",
@@ -120,64 +171,12 @@
                 logo.setAttribute("src",snapshot_img[4]);
             }
             div_maincontainer.appendChild(logo);
-            
-             
 
-            //worker
-            let clockWorker;
-            let seconds = 0;
-            function setColor() {
-        
-                const colors = ['blue','red',  'green', 'indigo', 'orange', 'yellow', 'violet'];
-                const index = Math.floor(seconds ) % colors.length;
-                seconds+=1;
-                return colors[index];
-            }
-            function create_worker(){
-                // worker เป็นคนนับเวลา เปิดเวลาขวาบน ซ่อนปุ่ม
-                if(typeof(clockWorker) == "undefined") {
-                    clockWorker = new Worker("worker.js");
-                }
-                clockWorker.onmessage = function(event) {
-                    date_clock.innerHTML = event.data;
-                    date_clock.style.backgroundColor = setColor();
-                    date_clock.style.color = setColor();
-                }   
-            }
-            function teminate_worker(){
-                if(typeof(clockWorker) != "undefined") {
-                    clockWorker.terminate();
-                    clockWorker = undefined;
-                }
-            }
-            date_clock_button.onclick = () => {
-                // ถ้ากดก็ให้สร้างweb worker]
-                date_clock.style.visibility = "visible"
-                date_clock.innerHTML = new Date().toString();
-                create_worker();
-                date_clock_button.remove();
-            };
-            
-            date_clock.onclick = () => {
-                if(typeof(clockWorker) != "undefined"){
-                    date_clock.innerHTML = new Date().toString();
-                    teminate_worker();
-                    date_clock.style.position = "relative";
-                    
-                }else{
-                    date_clock.innerHTML = new Date().toString();                    
-                    create_worker();
-                    date_clock.style.position = "fixed";
-                    
-                }
-            };
-            
             profile.onclick = () =>{
                 profile_info.hidden = !profile_info.hidden;
                 
             };
-            
-            
+             
         </script>
     </body>
 </html>
