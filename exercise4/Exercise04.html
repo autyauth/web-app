@@ -42,10 +42,9 @@
             let clockWorker;
             let seconds = 0;
             const colors = ['blue','red',  'green', 'indigo', 'orange', 'yellow', 'violet'];
-            function setColor() {
-        
-                
-                const index = Math.floor(seconds) % colors.length;
+            let index;
+            function setColor() { 
+                index = Math.floor(seconds) % colors.length;
                 
                 seconds+=1;
                 return colors[index];
