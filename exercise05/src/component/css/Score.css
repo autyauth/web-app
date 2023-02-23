@@ -1,0 +1,12 @@
+.food-post-score{
+    color: rgb(105, 42, 105);
+    background-color: rgb(92, 215, 92);
+    border: 3px black solid;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    font-size: 30px;
+    font-weight: bold;    
+    
+}
