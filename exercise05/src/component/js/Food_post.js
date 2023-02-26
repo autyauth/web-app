@@ -2,7 +2,6 @@ import { Component } from "react";
 
 import '../css/Food_post.css';
 import Button from "./Button";
-import Button2 from "./Button2";
 import Score from "./Score";
 
 class Food_post extends Component{
@@ -32,7 +31,7 @@ class Food_post extends Component{
             return "MIN";
         }else if (this.state.score_ >=10){
             return "MAX";
-        }else{
+        }else{  
             return this.state.score_;
         }
     }
@@ -61,7 +60,7 @@ class Food_post extends Component{
                 <div className="food-post-vote">
                     <Button text="Click to Vote" vote_callBack = {this.vote} />
                     <Score score={this.show_score()}/>
-                    <Button2 text="Click to Unvote" unvote_callBack = {this.unvote}/> 
+                    <Button text="Click to Unvote" vote_callBack = {this.unvote}/> 
                 </div>
             </div>
         );
